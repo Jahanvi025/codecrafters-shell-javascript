@@ -44,20 +44,27 @@ function handleType(answer) {
   }
 }
 
-// Function to handle executable files
+// Modify handleFile function to print only the program name
 function handleFile(answer) {
-  const fileName = answer.split(' ')[0];
-  const args = answer.split(' ').slice(1);
-  const paths = process.env.PATH.split(":");
+  const fileName = answer.split(' ')[0];  // Get the program name
+  const args = answer.split(' ').slice(1); // Get the arguments for the program
+  const paths = process.env.PATH.split(":");  // Get the directories in PATH
 
   for (const pathEnv of paths) {
-    let destPath = path.join(pathEnv, fileName);
+    let destPath = path.join(pathEnv, fileName); // Join the path with the executable
     if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
+      // Use path.basename() to extract just the file name from the full path
+      const programName = path.basename(destPath);
+      
+      // Print only the program name, not the full path
       execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
+
+      // Print Arg #0 using the program name (not full path)
+      rl.write(`Arg #0 (program name): ${programName}\n`);
       return;
     }
   }
-  rl.write(`${answer}: command not found\n`);
+  rl.write(`${answer}: command not found\n`);  // Handle if command not found
 }
 
 // This function will handle the prompt and user input
