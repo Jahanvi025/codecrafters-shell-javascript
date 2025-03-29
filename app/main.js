@@ -44,7 +44,10 @@ function handleType(answer) {
   }
 }
 
-// Modify handleFile function to print only the program name
+const { execFileSync } = require('node:child_process');
+const path = require('path'); // Make sure path module is required
+const fs = require('fs');
+
 function handleFile(answer) {
   const fileName = answer.split(' ')[0];  // Get the program name
   const args = answer.split(' ').slice(1); // Get the arguments for the program
@@ -60,11 +63,11 @@ function handleFile(answer) {
       execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
 
       // Print Arg #0 using the program name (not full path)
-      rl.write(`Arg #0 (program name): ${programName}\n`);
+      console.log(`Arg #0 (program name): ${programName}`);
       return;
     }
   }
-  rl.write(`${answer}: command not found\n`);  // Handle if command not found
+  console.log(`${answer}: command not found\n`);  // Handle if command not found
 }
 
 // This function will handle the prompt and user input
