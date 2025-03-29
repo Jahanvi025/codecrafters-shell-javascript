@@ -54,7 +54,8 @@ function handleFile(answer) {
     let destPath = path.join(pathEnv, fileName); // Join the path with the executable
     if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
       // Extract just the program name, no full path
-      const programName = path.basename(destPath); // This should give 'custom_exe_8396'
+      const programName = destPath.split('/').pop(); // Get the last part of the path (the actual executable name)
+
       
       // Execute the program with the given arguments
       execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
