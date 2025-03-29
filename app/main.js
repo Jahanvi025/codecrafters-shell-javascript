@@ -9,16 +9,20 @@ const rl = readline.createInterface({
 // This is the function that handles the prompt and user input
 function prompt() {
   rl.question("$ ", (answer) => {
-    // Process the input, here it's always a 'command not found' message
-    if(answer.trim() === "exit 0"){
-      //console.log("Exiting...");
-      rl.close(); // Close the readline interface
-      process.exit(0); // Exit the process with status 0
-    }
-    else{
+     // Check if the command is 'echo'
+     if (answer.startsWith("echo ")) {
+      // Extract everything after 'echo ' and print it
+      console.log(answer.slice(5)); // 5 because 'echo ' is 5 characters long
+    } else if (answer.trim() === "exit 0") {
+      // Handle 'exit 0' command
+      rl.close();
+      process.exit(0);
+    } else {
+      // Handle invalid commands
       console.log(`${answer}: command not found`);
-      prompt(); // Recursive call to continue prompting for input
     }
+    
+    prompt(); 
   });
 }
 
