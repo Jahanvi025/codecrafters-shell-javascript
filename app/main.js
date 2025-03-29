@@ -11,7 +11,7 @@ function prompt() {
   rl.question("$ ", (answer) => {
     // Process the input, here it's always a 'command not found' message
     if(answer.trim() === "exit 0"){
-      console.log("Exiting...");
+      //console.log("Exiting...");
       rl.close(); // Close the readline interface
       process.exit(0); // Exit the process with status 0
     }
