@@ -64,7 +64,7 @@ function prompt() {
   rl.question("$ ", (answer) => {
   if (answer.startsWith("invalid")) {
     handleInvalid(answer);
-    question();
+    prompt();
   } else {
     switch (answer.split(" ")[0].toLowerCase()) {
       case "exit":
@@ -72,15 +72,15 @@ function prompt() {
         break;
       case "echo":
         handleEcho(answer);
-        question();
+        prompt();
         break;
       case "type":
           handleType(answer);
-          question();
+          prompt();
           break;
       default:
         handleFile(answer);
-        question()
+        prompt()
     }
   }
   });
