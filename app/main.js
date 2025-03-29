@@ -6,14 +6,14 @@ const rl = readline.createInterface({
   prompt: "$ "
 });
 
-rl.prompt();
+// This is the function that handles the prompt and user input
+function prompt() {
+  rl.question("$ ", (answer) => {
+    // Process the input, here it's always a 'command not found' message
+    console.log(`${answer}: command not found`);
+    prompt(); // Recursive call to continue prompting for input
+  });
+}
 
-rl.question("$ ", (answer) => {
-  console.log(`${answer}: command not found\n`);
-  rl.close();
-});
-
-rl.on("line", (input) => {
-  console.log(`${input}: command not found`);
-  rl.prompt();
- });
+// Start the first prompt
+prompt();
