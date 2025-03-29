@@ -9,80 +9,81 @@ const rl = readline.createInterface({
   prompt: "$ "
 });
 
+// Function to handle invalid commands
 function handleInvalid(answer) {
   rl.write(`${answer}: command not found\n`);
 }
 
+// Function to handle 'exit' command
 function handleExit() {
   rl.close();
 }
 
+// Function to handle 'echo' command
 function handleEcho(answer) {
   rl.write(`${answer.split(" ").slice(1).join(" ")}\n`);
 }
 
-
+// Function to handle 'type' command
 function handleType(answer) {
-  const command = answer.split(' ')[1]
-  // List of built-in commands
-   const builtins = ['echo', 'exit', 'type'];
+  const command = answer.split(' ')[1];
+  const builtins = ['echo', 'exit', 'type'];
 
-  if(builtins.includes(command.toLowerCase())) {
-    rl.write(`${command} is a shell builtin\n`)
+  if (builtins.includes(command.toLowerCase())) {
+    rl.write(`${command} is a shell builtin\n`);
   } else {
-    const paths = process.env.PATH.split(":")
-    for(const pathEnv of paths) {
+    const paths = process.env.PATH.split(":");
+    for (const pathEnv of paths) {
       let destPath = path.join(pathEnv, command);
-      if(fs.existsSync(destPath) && fs.statSync(destPath).isFile()){        
-        rl.write(`${command} is ${destPath}\n`)
-        return
+      if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
+        rl.write(`${command} is ${destPath}\n`);
+        return;
       }
     }
-    rl.write(`${command}: not found\n`)
+    rl.write(`${command}: not found\n`);
   }
 }
 
-
+// Function to handle executable files
 function handleFile(answer) {
-  const fileName = answer.split(' ')[0]
-  const args = answer.split(' ').slice(1)
-  const paths = process.env.PATH.split(":")
-  for(const pathEnv of paths) {
+  const fileName = answer.split(' ')[0];
+  const args = answer.split(' ').slice(1);
+  const paths = process.env.PATH.split(":");
+
+  for (const pathEnv of paths) {
     let destPath = path.join(pathEnv, fileName);
-    if(fs.existsSync(destPath) && fs.statSync(destPath).isFile()){        
-      execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' })
-    }
-    else{
-      console.log(`${answer}: command not found`);
+    if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
+      execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
+      return;
     }
   }
-  
+  rl.write(`${answer}: command not found\n`);
 }
 
-// This is the function that handles the prompt and user input
+// This function will handle the prompt and user input
 function prompt() {
   rl.question("$ ", (answer) => {
-  if (answer.startsWith("invalid")) {
-    handleInvalid(answer);
-    prompt();
-  } else {
-    switch (answer.split(" ")[0].toLowerCase()) {
-      case "exit":
-        handleExit();
-        break;
-      case "echo":
-        handleEcho(answer);
-        prompt();
-        break;
-      case "type":
+    if (answer.startsWith("invalid")) {
+      handleInvalid(answer);
+      prompt();
+    } else {
+      switch (answer.split(" ")[0].toLowerCase()) {
+        case "exit":
+          handleExit();
+          break;
+        case "echo":
+          handleEcho(answer);
+          prompt();
+          break;
+        case "type":
           handleType(answer);
           prompt();
           break;
-      default:
-        handleFile(answer);
-        prompt()
+        default:
+          handleFile(answer);
+          prompt();
+      }
     }
-  }
   });
 }
 
