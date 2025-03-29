@@ -53,15 +53,12 @@ function handleFile(answer) {
   for (const pathEnv of paths) {
     let destPath = path.join(pathEnv, fileName); // Join the path with the executable
     if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
-      // Extract just the program name, no full path
-      const programName = destPath.split('/').pop(); // Get the last part of the path (the actual executable name)
-
-      
+     
       // Execute the program with the given arguments
       execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
 
       // Print only the program name (no full path)
-      console.log(`Arg #0 (program name): ${programName}`);
+      console.log(`Arg #0 (program name): ${fileName}`);
       return;
     }
   }
