@@ -44,10 +44,6 @@ function handleType(answer) {
   }
 }
 
-const { execFileSync } = require('node:child_process');
-const path = require('path'); // Make sure path module is required
-const fs = require('fs');
-
 function handleFile(answer) {
   const fileName = answer.split(' ')[0];  // Get the program name
   const args = answer.split(' ').slice(1); // Get the arguments for the program
