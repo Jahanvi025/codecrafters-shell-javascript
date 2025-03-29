@@ -49,21 +49,23 @@ function handleFile(answer) {
   const args = answer.split(' ').slice(1); // Get the arguments for the program
   const paths = process.env.PATH.split(":");  // Get the directories in PATH
 
+  // Look through all directories in PATH to find the executable
   for (const pathEnv of paths) {
     let destPath = path.join(pathEnv, fileName); // Join the path with the executable
     if (fs.existsSync(destPath) && fs.statSync(destPath).isFile()) {
-      // Use path.basename() to extract just the file name from the full path
-      const programName = path.basename(destPath);
+      // Extract just the program name, no full path
+      const programName = path.basename(destPath); // This should give 'custom_exe_8396'
       
-      // Print only the program name, not the full path
+      // Execute the program with the given arguments
       execFileSync(destPath, args, { encoding: 'utf-8', stdio: 'inherit' });
 
-      // Print Arg #0 using the program name (not full path)
+      // Print only the program name (no full path)
       console.log(`Arg #0 (program name): ${programName}`);
       return;
     }
   }
-  console.log(`${answer}: command not found\n`);  // Handle if command not found
+  // If the executable is not found, print command not found
+  console.log(`${fileName}: command not found\n`);
 }
 
 // This function will handle the prompt and user input
