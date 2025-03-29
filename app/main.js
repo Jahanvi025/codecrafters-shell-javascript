@@ -6,23 +6,35 @@ const rl = readline.createInterface({
   prompt: "$ "
 });
 
-// This is the function that handles the prompt and user input
+// List of built-in commands
+const builtins = ['echo', 'exit', 'type'];
+
+// This function will continuously prompt for user input
 function prompt() {
   rl.question("$ ", (answer) => {
-     // Check if the command is 'echo'
-     if (answer.startsWith("echo ")) {
-      // Extract everything after 'echo ' and print it
-      console.log(answer.slice(5)); // 5 because 'echo ' is 5 characters long
+    const command = answer.trim().split(' ')[0]; // Get the first word of the command
+
+    if (answer.startsWith('type ')) {
+      // Handle 'type' command
+      if (builtins.includes(command)) {
+        console.log(`${command} is a shell builtin`);
+      } else {
+        console.log(`${command}: not found`);
+      }
     } else if (answer.trim() === "exit 0") {
       // Handle 'exit 0' command
+      console.log("Exiting the shell...");
       rl.close();
       process.exit(0);
+    } else if (builtins.includes(command)) {
+      // Handle other built-in commands like echo, exit, type
+      console.log(`${command} is a shell builtin`);
     } else {
-      // Handle invalid commands
-      console.log(`${answer}: command not found`);
+      // Handle unrecognized commands
+      console.log(`${command}: not found`);
     }
-    
-    prompt(); 
+
+    prompt(); // Continue prompting for input
   });
 }
 
